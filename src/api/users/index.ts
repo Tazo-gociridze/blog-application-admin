@@ -4,7 +4,11 @@ import { mapUsersList } from "../../utils/admin";
 export interface formValuesType {
     email: string;
     phone: string
-    id: string;
+    image_url: string,
+}
+
+export interface formValuesTypeWithId extends formValuesType {
+  id: string;
 }
 
 export const getUsersList = () => {

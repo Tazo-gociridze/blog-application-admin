@@ -1,20 +1,23 @@
 import { Button, Form, Input, Skeleton } from "antd";
 import { useForm } from "antd/es/form/Form";
-import {
-  formValuesType,
-} from "../../../api/users";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSpecificBlog, updateBlog } from "../../../api/blogs";
 import { useState } from "react";
-import Title from "antd/es/typography/Title";
+
+interface updateBlogTypes {
+  image_url: string;
+  id: string;
+  title_en: string;
+  description_en: string ;
+}
 
 const BlogUpdateForm = () => {
-const [imagePath, setImagePath] = useState<File | undefined>(undefined);
+  const [imagePath, setImagePath] = useState<File | undefined | string>(undefined);
 
   const [form] = useForm();
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({
     queryKey: ["specificBlog"],
     queryFn: () => getSpecificBlog(id),
@@ -22,18 +25,25 @@ const [imagePath, setImagePath] = useState<File | undefined>(undefined);
 
   const { mutate } = useMutation({
     mutationKey: ["updateBlog"],
-    //@ts-ignore
-    mutationFn: ({image_url, id, ...payload }: formValuesType) => updateBlog(image_url, id, payload),
+    mutationFn: ({ image_url, id, ...payload}: updateBlogTypes) => updateBlog(image_url, id, payload),
     onSuccess: () => {
-      navigate('/blogs')
-    }
+      navigate("/blogs");
+    },
   });
 
-  const handleFinish = (formValues: formValuesType) => {
-    //@ts-ignore
-      mutate({image_url: imagePath, id: id, ...formValues});
-  };
+  const handleFinish = (formValues: Omit<updateBlogTypes, "image_url" | "id">) => {
+    const imageUrl = typeof imagePath === 'string' ? imagePath : "";
+     if(!id) {
+          return
+      }
+      mutate({ image_url: imageUrl, id: id, ...formValues });
+};
 
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  if(e.target.files && e.target.files[0]) {
+    setImagePath(e.target.files[0]);
+  }
+}
 
   return (
     <div>
@@ -54,16 +64,31 @@ const [imagePath, setImagePath] = useState<File | undefined>(undefined);
           colon={false}
           style={{ maxWidth: 600 }}
         >
-          <Form.Item label="Title_en" name="title_en" rules={[{ required: false }]}>
+          <Form.Item
+            label="Title_en"
+            name="title_en"
+            rules={[{ required: false }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label="Description_en" name="description_en" rules={[{ required: false }]}>
+          <Form.Item
+            label="Description_en"
+            name="description_en"
+            rules={[{ required: false }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label="Image" name="image_url" rules={[{ required: false }]}>
-            <Input type="file" onChange={(e) => setImagePath(e.target.files?.[0])}/>
+          <Form.Item
+            label="Image"
+            name="image_url"
+            rules={[{ required: false }]}
+          >
+            <Input
+              type="file"
+              onChange={handleImageChange}
+            />
           </Form.Item>
 
           <Form.Item label=" ">

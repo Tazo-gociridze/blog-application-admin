@@ -3,24 +3,25 @@ import { useForm } from "antd/es/form/Form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { signin } from "../../api/signin";
-
+import { useAuthContext } from "../../contextApi/auth/hook/useAuthContext";
 
 const SignIn = () => {
   const [form] = useForm();
-  const navigate = useNavigate()
+  const { handleStoreUser } = useAuthContext();
+  const navigate = useNavigate();
 
   const { mutate } = useMutation({
     mutationKey: ["signin"],
-    mutationFn: (signInData: { email: string; password: string }) => signin(signInData),
-    onSuccess: () => {
-      navigate("/")
-    }
-  },);
-  const handleFinish = (formValues: {
-    email: string;
-    password: string;
-  }) => {
-    mutate({ ...formValues as any});
+    mutationFn: (signInData: { email: string; password: string }) =>
+      signin(signInData),
+    onSuccess: (data) => {
+      navigate("/");
+      handleStoreUser(data);
+    },
+  });
+
+  const handleFinish = (formValues: { email: string; password: string }) => {
+    mutate({ ...(formValues as { email: string; password: string }) });
   };
 
   return (

@@ -22,7 +22,7 @@ export interface BlogsDataTypes  {
    blog_id: string;
 }
 
-export const mapBlogsList = (blogs: any) => {
+export const mapBlogsList = (blogs: BlogsDataTypes[]) => {
    return [...blogs].reverse()?.map((blog: BlogsDataTypes) => ({
       title_en: blog?.title_en,
       description_en: blog?.description_en,

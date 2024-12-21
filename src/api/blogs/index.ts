@@ -29,6 +29,8 @@ export const updateBlog = async (
   id: string,
   payload: { title_en: string; description_en: string }
 ) => {
+
+  console.log(payload)
   try {
     const res = await supabase
       .from("blog-data")

@@ -4,7 +4,7 @@ import type { TableProps } from "antd";
 import { getBlogsList } from "../../api/blogs";
 import { Link } from "react-router-dom";
 
-interface DataType {
+interface BlogsDataType {
   key: string;
   email: string;
   age: number;
@@ -12,7 +12,7 @@ interface DataType {
   tags: string[];
 }
 
-const columns: TableProps<DataType>["columns"] = [
+const columns: TableProps<BlogsDataType>["columns"] = [
   {
     title: "Title_en",
     dataIndex: "title_en",
@@ -59,8 +59,7 @@ const Blogs = () => {
       <Link to={"/blogs/create"}>
         <Button className="mb-6">Add blog</Button>
       </Link>
-      {/* @ts-ignore */}
-      <Table<DataType> columns={columns} dataSource={data} />
+      <Table<BlogsDataType> columns={columns} dataSource={data} />
     </div>
   );
 };

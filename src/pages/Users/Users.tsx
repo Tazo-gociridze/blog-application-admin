@@ -5,14 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { UserDataType } from "./usersData";
 import { Link } from "react-router-dom";
 
+
 const Users = () => {
   const { data } = useQuery({
     queryKey: ["mappedUsersList"],
     queryFn: getUsersList,
   });
-
-
-  console.log(data);
 
   const columns: TableProps<UserDataType>["columns"] = [
     {
@@ -58,7 +56,6 @@ const Users = () => {
       <Link to={"/user/create"}>
         <Button className="mb-6">Add user</Button>
       </Link>
-      {/* @ts-ignore */}
       <Table columns={columns} dataSource={data}></Table>
     </div>
   );

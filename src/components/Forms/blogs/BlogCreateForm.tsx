@@ -16,7 +16,7 @@ const BlogCreateForm = () => {
     title_en: string;
     description_en: string;
   }) => {
-    mutate({ ...formValues as any});
+    mutate({ ...formValues as {title_en: string, description_en: string}});
   };
 
   return (

@@ -1,9 +1,9 @@
 export interface UserDataType {
-    email: string;
-    phone: string;
-    createdAt: string;
-    lastSignIn: string;
-    key: string | number
-    id: string
+  email?: string;
+  createdAt: string;
+  phone?: string;
+  lastSignIn?: string;
+  key: string;
+  id: string;
   }
   

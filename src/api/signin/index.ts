@@ -6,5 +6,5 @@ interface SignInDataType {
 }
 
 export const signin  = (signInData: SignInDataType) => {
-    return supabase.auth.signInWithPassword({...signInData}).then((res) => console.log(res))
+    return supabase.auth.signInWithPassword({...signInData}).then((res) => res.data.user)
 }

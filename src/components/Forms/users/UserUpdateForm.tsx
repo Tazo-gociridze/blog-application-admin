@@ -4,6 +4,7 @@ import {
   updateUser,
   formValuesType,
   getSpecificUser,
+  formValuesTypeWithId,
 } from "../../../api/users";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,17 +23,18 @@ const UserUpdateForm = () => {
 
   const { mutate } = useMutation({
     mutationKey: ["updateUser"],
-    //@ts-ignore
-    mutationFn: ({id, ...payload }: formValuesType) => updateUser(id, payload),
+    mutationFn: ({id, ...payload }: formValuesTypeWithId) => updateUser(id, payload),
     onSuccess: () => {
       navigate('/')
     }
   });
 
-  const handleFinish = (formValues: formValuesType) => {
-    //@ts-ignore
-      mutate({id: id, ...formValues});
-  };
+  const handleFinish = (formValues: Omit<formValuesType, 'id'>) => {
+    if(!id) {
+         return;
+     }
+      mutate({ id: id, ...formValues });
+ };
 
   return (
     <div>
