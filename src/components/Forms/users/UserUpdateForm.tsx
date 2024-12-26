@@ -1,40 +1,8 @@
 import { Button, Form, Input, Skeleton } from "antd";
-import { useForm } from "antd/es/form/Form";
-import {
-  updateUser,
-  formValuesType,
-  getSpecificUser,
-  formValuesTypeWithId,
-} from "../../../api/users";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useUserUpdateFormLogic } from "./hooks/useUserUpdateFormLogic";
 
 const UserUpdateForm = () => {
-  const [form] = useForm();
-  const { id } = useParams();
-  const navigate = useNavigate()
-  const { data, isLoading } = useQuery({
-    queryKey: ["specificUser"],
-    queryFn: () => getSpecificUser(id),
-  });
-
-  const queryClient = useQueryClient();
-  queryClient.invalidateQueries({ queryKey: ['mappedUsersList'] });
-
-  const { mutate } = useMutation({
-    mutationKey: ["updateUser"],
-    mutationFn: ({id, ...payload }: formValuesTypeWithId) => updateUser(id, payload),
-    onSuccess: () => {
-      navigate('/')
-    }
-  });
-
-  const handleFinish = (formValues: Omit<formValuesType, 'id'>) => {
-    if(!id) {
-         return;
-     }
-      mutate({ id: id, ...formValues });
- };
+  const { form, data, isLoading, handleFinish } = useUserUpdateFormLogic();
 
   return (
     <div>

@@ -1,28 +1,11 @@
 import { Button, Form, Input } from "antd";
-import { useForm } from "antd/es/form/Form";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { signin } from "../../api/signin";
-import { useAuthContext } from "../../contextApi/auth/hook/useAuthContext";
+import { useSignInLogic } from "./hooks/useSignInLogic";
 
 const SignIn = () => {
-  const [form] = useForm();
-  const { handleStoreUser } = useAuthContext();
-  const navigate = useNavigate();
-
-  const { mutate } = useMutation({
-    mutationKey: ["signin"],
-    mutationFn: (signInData: { email: string; password: string }) =>
-      signin(signInData),
-    onSuccess: (data) => {
-      navigate("/");
-      handleStoreUser(data);
-    },
-  });
-
-  const handleFinish = (formValues: { email: string; password: string }) => {
-    mutate({ ...(formValues as { email: string; password: string }) });
-  };
+const {
+  form,
+  handleFinish
+} = useSignInLogic()
 
   return (
     <div>

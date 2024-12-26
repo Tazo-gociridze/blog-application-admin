@@ -1,55 +1,11 @@
-import { Button, Space, Table } from "antd";
-import type { TableProps } from "antd";
-import { getUsersList } from "../../api/users";
-import { useQuery } from "@tanstack/react-query";
-import { UserDataType } from "./usersData";
+import { Button, Table } from "antd";
+import { columns } from "./usersData";
 import { Link } from "react-router-dom";
+import { useGetUsersListQuery } from "../../react-query/query/users";
 
 
 const Users = () => {
-  const { data } = useQuery({
-    queryKey: ["mappedUsersList"],
-    queryFn: getUsersList,
-  });
-
-  const columns: TableProps<UserDataType>["columns"] = [
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Created at",
-      dataIndex: "createdAt",
-      key: "createdAt",
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Last sign in",
-      dataIndex: "lastSignIn",
-      key: "lastSignIn",
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, row) => (
-        <Space size="middle">
-          <Link
-            to={`/user/update/${row.id}`}
-            key={row.key}
-            className="text-green-600"
-          >
-            Update user
-          </Link>
-        </Space>
-      ),
-    },
-  ];
+  const { data } = useGetUsersListQuery({queryOptions: {}})
 
   return (
     <div>

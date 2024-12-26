@@ -1,6 +1,6 @@
 import { supabase } from "../../supabase"
 
-interface SignInDataType {
+export interface SignInDataType {
     email: string;
     password: string;
 }

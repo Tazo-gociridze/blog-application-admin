@@ -7,7 +7,7 @@ export const getBlogsList = async () => {
     .select("*")
     .throwOnError()
     .then((res) => {
-      return mapBlogsList(res.data);
+      return mapBlogsList(res.data as any);
     });
 };
 
@@ -19,6 +19,7 @@ export const getSpecificBlog = async (id: string | undefined) => {
       .eq("blog_id", id)
       .single()
       .then((res) => {
+        console.log(res.data)
         return res.data;
       });
   }
@@ -29,25 +30,21 @@ export const updateBlog = async (
   id: string,
   payload: { title_en: string; description_en: string }
 ) => {
-
-  console.log(payload)
   try {
-    const res = await supabase
+   await supabase
       .from("blog-data")
       .update({ ...payload, image_url })
       .eq("blog_id", id)
       .single();
-    console.log(res);
-    return res;
   } catch (e) {
     console.error(e);
   }
 };
 
-export const createAddBlog = async (newBlog: {
+export const createAddBlog = async (formValues: {
   title_en: string;
   description_en: string;
 }) => {
-  console.log(newBlog);
-  return supabase.from("blog-data").insert({...newBlog, title_ka: '', description_ka: '', image_url: '', user_id: "62016931-9743-411a-bf62-54d0a46d3fdb"});
+  console.log(formValues);
+  return supabase.from("blog-data").insert({...formValues, title_ka: '', description_ka: '', image_url: '', user_id: "62016931-9743-411a-bf62-54d0a46d3fdb"});
 };

@@ -6,7 +6,7 @@ export const mapUsersList = (user: User[]) => {
         email: data?.email,
         createdAt: data?.created_at,
         phone: data?.phone,
-        lastSignIn: data?.last_sign_in_at,
+        lastSignIn: data?.last_sign_in_at ? dayjs(data.created_at).format("YYYY-MM-DD HH:mm") : null,
         key: data.id,
         id: data.id
      }))
@@ -20,6 +20,10 @@ export interface BlogsDataTypes  {
    key:  string,
    user_id:  string,
    blog_id: string;
+   email: string,
+   address: string,
+   age: number,
+   tags: [],
 }
 
 export const mapBlogsList = (blogs: BlogsDataTypes[]) => {

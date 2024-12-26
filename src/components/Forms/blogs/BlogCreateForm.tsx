@@ -1,22 +1,21 @@
 import { Button, Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { useMutation } from "@tanstack/react-query";
-import { createAddBlog } from "../../../api/blogs";
+
+import { newBlogType, useCreateBlogMutation } from "../../../react-query/mutation/blogs";
+import { useNavigate } from "react-router-dom";
 
 const BlogCreateForm = () => {
   const [form] = useForm();
+  const navigate = useNavigate();
 
-  const { mutate } = useMutation({
-    mutationKey: ["createBlog"],
-    mutationFn: (newBlog: { title_en: string; description_en: string }) =>
-      createAddBlog(newBlog),
-  });
+  const { mutate } = useCreateBlogMutation({mutationOptions: {
+    onSuccess: () => {
+      navigate("/blogs");
+    }
+  }})
 
-  const handleFinish = (formValues: {
-    title_en: string;
-    description_en: string;
-  }) => {
-    mutate({ ...formValues as {title_en: string, description_en: string}});
+  const handleFinish = (formValues: newBlogType) => {
+    mutate({...formValues});
   };
 
   return (

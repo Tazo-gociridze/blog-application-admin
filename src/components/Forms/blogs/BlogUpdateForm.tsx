@@ -1,49 +1,16 @@
 import { Button, Form, Input, Skeleton } from "antd";
-import { useForm } from "antd/es/form/Form";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { getSpecificBlog, updateBlog } from "../../../api/blogs";
-import { useState } from "react";
+import { useBlogUpdateFormLogic } from "./hooks/useBlogUpdateFormLogic";
 
-interface updateBlogTypes {
-  image_url: string;
-  id: string;
-  title_en: string;
-  description_en: string ;
-}
 
 const BlogUpdateForm = () => {
-  const [imagePath, setImagePath] = useState<File | undefined | string>(undefined);
 
-  const [form] = useForm();
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { data, isLoading } = useQuery({
-    queryKey: ["specificBlog"],
-    queryFn: () => getSpecificBlog(id),
-  });
-
-  const { mutate } = useMutation({
-    mutationKey: ["updateBlog"],
-    mutationFn: ({ image_url, id, ...payload}: updateBlogTypes) => updateBlog(image_url, id, payload),
-    onSuccess: () => {
-      navigate("/blogs");
-    },
-  });
-
-  const handleFinish = (formValues: Omit<updateBlogTypes, "image_url" | "id">) => {
-    const imageUrl = typeof imagePath === 'string' ? imagePath : "";
-     if(!id) {
-          return
-      }
-      mutate({ image_url: imageUrl, id: id, ...formValues });
-};
-
-const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if(e.target.files && e.target.files[0]) {
-    setImagePath(e.target.files[0]);
-  }
-}
+  const {
+    form,
+    data,
+    isLoading,
+    handleFinish,
+    handleImageChange,
+  } = useBlogUpdateFormLogic() 
 
   return (
     <div>

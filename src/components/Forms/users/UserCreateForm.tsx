@@ -1,36 +1,8 @@
 import { Button, Form, Input } from "antd";
-import { useForm } from "antd/es/form/Form";
-import { useMutation } from "@tanstack/react-query";
-import { createAddUser } from "../../../api/users";
-import { useNavigate } from "react-router-dom";
-
-interface userDataTypes {
-  email: string;
-  password: string;
-  phone: string;
-}
+import { useUserCreateFormLogic } from "./hooks/useUserCreateFormLogic";
 
 const UserCreateForm = () => {
-  const [form] = useForm();
-  const navigate = useNavigate();
-
-  const { mutate } = useMutation({
-    mutationKey: ["createUser"],
-    mutationFn: (newUser: userDataTypes) => createAddUser(newUser),
-    onSuccess: () => {
-      navigate("/");
-    },
-  });
-
-  const handleFinish = (formValues: {
-    email: string;
-    password: string;
-    phone: string;
-  }) => {
-    mutate({
-      ...(formValues as userDataTypes),
-    });
-  };
+  const { form, handleFinish } = useUserCreateFormLogic();
 
   return (
     <div>

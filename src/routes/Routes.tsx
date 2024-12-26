@@ -1,16 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminLayout from "../Layouts/AdminLayout/AdminLayout";
-import Users from "../pages/Users/Users";
-import Blogs from "../pages/Blogs/Blogs";
-import UserCreateView from "../pages/Users/views/create";
-import UserUpdateView from "../pages/Users/views/update";
-import { FormProvider } from "antd/es/form/context";
 import { useForm } from "antd/es/form/Form";
-import BlogsUpdateForm from "../pages/Blogs/views/update";
-import BlogsCreateView from "../pages/Blogs/views/create";
-import SignIn from "../pages/signin/SignIn";
 import AuthLayout from "../Layouts/authLayer/AuthLayer";
-
+import { USER_ROUTES } from "./user";
+import { BLOG_ROUTES } from "./blogs";
+import { AUTH_ROUTES } from "./auth";
 
 const AppRoutes = () => {
   const formMethods = useForm();
@@ -18,69 +12,14 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-          <Route path="/" element={<AdminLayout />}>
-            <Route
-              index
-              element={
-                <FormProvider {...formMethods}>
-                     <Users />
-                </FormProvider>
-              }
-            />
-            <Route
-              path="/user/update/:id"
-              element={
-                <FormProvider {...formMethods}>
-                    <UserUpdateView />
-                </FormProvider>
-              }
-            />
-            <Route
-              path="/user/create"
-              element={
-                <FormProvider {...formMethods}>
-                    <UserCreateView />
-                </FormProvider>
-              }
-            />
-            <Route
-              path="/blogs"
-              element={
-                <FormProvider {...formMethods}>
-                    <Blogs />
-                </FormProvider>
-              }
-            />
+        <Route path="/" element={<AdminLayout />}>
+          {USER_ROUTES({ formMethods })}
+          {BLOG_ROUTES({ formMethods })}
+        </Route>
 
-            <Route
-              path="/blogs/create"
-              element={
-                <FormProvider {...formMethods}>
-                    <BlogsCreateView />
-                </FormProvider>
-              }
-            />
-
-            <Route
-              path="/blog/update/:id"
-              element={
-                <FormProvider {...formMethods}>
-                    <BlogsUpdateForm />
-                </FormProvider>
-              }
-            />
-          </Route>
-          
-          <Route path="/signin" element={<AuthLayout />}>
-            <Route
-              index
-              element={
-                <FormProvider {...formMethods}>
-                    <SignIn />
-                </FormProvider>
-              }
-            />
-          </Route>
+        <Route path="/signin" element={<AuthLayout />}>
+        {AUTH_ROUTES({ formMethods })}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
